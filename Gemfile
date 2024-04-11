@@ -35,8 +35,9 @@ gem 'bootsnap', require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-gem 'httparty'
 gem 'rack-cors'
+
+gem 'httparty'
 gem 'will_paginate'
 
 group :development, :test do
@@ -47,4 +48,5 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'faker'
 end

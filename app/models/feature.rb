@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Feature < ApplicationRecord
+  has_many :comments
+
   validates :external_id, presence: true, uniqueness: true
   validates :magnitude, presence: true
   validates :place, presence: true

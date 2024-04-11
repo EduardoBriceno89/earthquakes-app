@@ -9,3 +9,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# creates comments for features
+Feature.all.each do |feature|
+  100.times do
+    feature.comments.create(body: Faker::Lorem.sentence)
+  end
+end

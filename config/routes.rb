@@ -2,8 +2,8 @@
 
 Rails.application.routes.draw do
   namespace :api do
-    namespace :v1 do
-      resources :features
+    resources :features do
+      resources :comments, only: %i[create index]
     end
   end
 end
