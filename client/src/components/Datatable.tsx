@@ -1,6 +1,8 @@
+import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react"
+import CommentsDialog from "./CommentsDialog";
 
 interface IFeatures {
   id: number;
@@ -25,6 +27,8 @@ interface IFeatures {
 
 const Datatable = () => {
   const [features, setFeatures] = useState<IFeatures[]>([])
+  const [commentsDialogVisible, setCommentsDialogVisible] = useState(false)
+  const [selectedFeatureId, setSelectedFeatureId] = useState(0)
 
   useEffect(() => {
     fetchFeatures()
@@ -42,21 +46,36 @@ const Datatable = () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <DataTable value={features} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} scrollable>
-          <Column field="attributes.title" header="Title" sortable></Column>
-          <Column field="attributes.place" header="Place" sortable></Column>
-          <Column field="attributes.time" header="Time" sortable></Column>
-          <Column field="attributes.magnitude" header="Magnitude" sortable></Column>
-          <Column field="attributes.tsunami" header="Tsunami" sortable></Column>
-          <Column field="links.external_url" header="Url"></Column>
-          <Column header="Comments">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-            </svg>
-
-          </Column>
-        </DataTable>
+      <div className="container mx-auto px-10">
+        <div className="flex justify-center items-center">
+          <DataTable value={features} paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} className="p-datatable-sm">
+            <Column field="attributes.title" header="Título" sortable></Column>
+            <Column field="attributes.place" header="Lugar" sortable></Column>
+            <Column field="attributes.time" header="Tiempo" sortable></Column>
+            <Column field="attributes.mag_type" header="Mag_type" sortable></Column>
+            <Column field="attributes.magnitude" header="Magnitud" sortable></Column>
+            <Column field="attributes.coordinates.latitude" header="Latitud" sortable></Column>
+            <Column field="attributes.coordinates.longitude" header="Latitud" sortable></Column>
+            <Column field="attributes.tsunami" header="Tsunami" sortable></Column>
+            <Column field="links.external_url" header="Url" body={(rowData: IFeatures) => (
+              <a href={rowData.links.external_url} target="_blank" rel="noopener noreferrer" className="truncate w-24 inline-block">
+                {rowData.links.external_url}
+              </a>
+            )}></Column>
+            <Column header="Comentarios" body={(rowData: IFeatures) => (
+              <Button icon="pi pi-comments" rounded onClick={() => {
+                setSelectedFeatureId(rowData.id)
+                setCommentsDialogVisible(true)
+              }} />
+            )} />
+          </DataTable>
+          <CommentsDialog
+            visible={commentsDialogVisible}
+            onHide={() => setCommentsDialogVisible(false)}
+            onsubmit={(body) => console.log(body)}
+            featureId={selectedFeatureId}
+          />
+        </div>
       </div>
     </>
   )
